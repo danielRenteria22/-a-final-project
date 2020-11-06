@@ -17,8 +17,33 @@ function draw() {
 
 function drawMousePosition(){
   stroke('red'); 
-  strokeWeight(10); 
-  point(mouseX, mouseY);
+  strokeWeight(10);
+  let nearPoint = getNearWallPoint() ;
+  if (nearPoint === null){
+    point(mouseX, mouseY);
+  } else{
+    point(nearPoint.x,nearPoint.y);
+  }
+}
+
+function getNearWallPoint(){
+  let nearPoint = null;
+  let offset = 25;
+  for (let wall of walls.walls){
+    let distance = dist(wall.p1.x,wall.p1.y,mouseX,mouseY);
+    if(distance < offset){
+      nearPoint = wall.p1;
+      break;
+    }
+
+    distance = dist(wall.p2.x,wall.p2.y,mouseX,mouseY);
+    if (distance < offset){
+      nearPoint = wall.p2;
+      break;
+    }
+  }
+
+  return nearPoint;
 }
 
 function drawCurrentLine(){
@@ -28,18 +53,27 @@ function drawCurrentLine(){
     point(initialWallPoint.x, initialWallPoint.y);
     stroke('black'); 
     strokeWeight(3); 
-    line(initialWallPoint.x,initialWallPoint.y,mouseX,mouseY);
+
+    let finalPoint = getNearWallPoint();
+    if (finalPoint == null){
+      finalPoint = createVector(mouseX,mouseY);
+    }
+    line(initialWallPoint.x,initialWallPoint.y,finalPoint.x,finalPoint.y);
   }
 }
 
 function mousePressed(){
-  initialWallPoint = createVector(mouseX,mouseY);
+  initialWallPoint = getNearWallPoint();
+  if(initialWallPoint == null){
+    initialWallPoint = createVector(mouseX,mouseY);
+  }
 }
 
 function mouseReleased(){
-  let finalPoint = createVector(mouseX,mouseY);
+  let finalPoint = getNearWallPoint();
+  if (finalPoint == null){
+    finalPoint = createVector(mouseX,mouseY);
+  }
   walls.addWall(initialWallPoint,finalPoint);
   initialWallPoint = null;
 }
-
-functiuon
