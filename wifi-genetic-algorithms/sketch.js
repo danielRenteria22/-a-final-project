@@ -28,14 +28,26 @@ function getNearWallPoint(){
   for (let wall of walls.walls){
     let distance = dist(wall.p1.x,wall.p1.y,mouseX,mouseY);
     if(distance < offset){
-      nearPoint = wall.p1;
+      nearPoint = createVector(wall.p1.x,wall.p1.y);
       break;
     }
 
     distance = dist(wall.p2.x,wall.p2.y,mouseX,mouseY);
     if (distance < offset){
-      nearPoint = wall.p2;
+      nearPoint = createVector(wall.p2.x,wall.p2.y);
       break;
+    }
+
+    
+  }
+
+  if(initialWallPoint != null){
+    let dx = abs(nearPoint.x - initialWallPoint.x);
+    let dy = abs(nearPoint.y - initialWallPoint.y);
+    if(dy < dx){
+      nearPoint.y = initialWallPoint.y;
+    } else{
+      nearPoint.x = initialWallPoint.x;
     }
   }
 
@@ -61,6 +73,8 @@ function mousePressed(){
 
 function mouseReleased(){
   let finalPoint = getNearWallPoint();
-  walls.addWall(initialWallPoint,finalPoint);
+  let initPoint = createVector(initialWallPoint.x,initialWallPoint.y);
+  let finishPoint = createVector(finalPoint.x,finalPoint.y);
+  walls.addWall(initPoint,finishPoint);
   initialWallPoint = null;
 }
