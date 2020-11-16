@@ -23,13 +23,16 @@ class Modem{
     }
 
     drawRays(walls){
-        stroke('orange'); 
         strokeWeight(2);
         for(let ray of this.rays){
             const intersection = ray.intersection(walls);
             if(intersection){
+                stroke('orange'); 
                 line(this.x,this.y,intersection.x,intersection.y)
             }
+
+            const triangle = ray.castedTriangle(walls);
+            triangle.draw();
         }
     }
 }
@@ -41,14 +44,14 @@ class Ray{
         this.direction = p5.Vector.fromAngle(radians(angle))
     }
 
-    castedTriangle(){
-        const beam1 = new Ray(this.o,this,this.angle + theta /2);
-        const beam2 = new Ray(this.o,this,this.angle - theta /2);
+    castedTriangle(walls){
+        const beam1 = new Ray(this.o,this.angle + theta /2);
+        const beam2 = new Ray(this.o,this.angle - theta /2);
 
 
-        const q1 = beam1.cast();
-        const q2 = beam2.cast();
-        const triangle = new CastTriangle(this.o,this.cast(),q1,q2);
+        const q1 = beam1.intersection(walls);
+        const q2 = beam2.intersection(walls);
+        const triangle = new CastTriangle(this.o,this.intersection(walls),q1,q2);
         return triangle;
     }
 
@@ -111,8 +114,16 @@ class CastTriangle{
     }
 
     draw(){
-
-    }
-
-    
+        let c = color('rgba(0, 0, 255, 0.3)');
+        fill(c);
+        noStroke();
+        triangle(
+            this.o.x,
+            this.o.y,
+            this.q1.x,
+            this.q1.y,
+            this.q2.x,
+            this.q2.y
+        )
+    }    
 }
