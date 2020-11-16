@@ -1,16 +1,29 @@
 let walls;
 let initialWallPoint;
+let modem;
 
 function setup() {
-  // put setup code here
-  walls = new Walls();
   createCanvas(800, 550);
+  walls = new Walls();
+  // adding border walls
+  const uppperLeft = createVector(0,0);
+  const upperRight = createVector(width,0);
+  const downLeft = createVector(0,height);
+  const downRight = createVector(width,height);
+  walls.addWall(upperRight,uppperLeft);
+  walls.addWall(upperRight,downRight);
+  walls.addWall(downRight,downLeft);
+  walls.addWall(downLeft,uppperLeft);
+  
   initialWallPoint = null;
+  modem = new Modem(400,275);
 }
 
 function draw() {
     // put drawing code here
     walls.draw();
+    modem.draw();
+    modem.drawRays(walls.walls);
     drawMousePosition();
     drawCurrentLine();
 }
@@ -77,4 +90,10 @@ function mouseReleased(){
   let finishPoint = createVector(finalPoint.x,finalPoint.y);
   walls.addWall(initPoint,finishPoint);
   initialWallPoint = null;
+}
+
+function keyPressed() {
+  if (key == ' '){
+    console.log("Space pressed");
+  }
 }
