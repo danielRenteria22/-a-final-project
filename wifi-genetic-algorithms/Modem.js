@@ -1,4 +1,5 @@
-const theta = 5;
+const theta = 3;
+const maxDistance = 350;
 
 class Modem{
     constructor(x,y){
@@ -56,20 +57,42 @@ class Ray{
     }
 
     intersection(walls){
-        let minDistance = null;
-        let intersection = null;
+        const pointDistances = []
         for(let wall of walls){
             const point = this.cast(wall);
             if(point){
                 const distance = dist(this.o.x,this.o.y,point.x,point.y);
-                if(distance < minDistance || minDistance  == null){
-                    intersection = point;
-                    minDistance = distance;
+                if(distance <= maxDistance){
+                    let pointDistance = {
+                        point,
+                        distance
+                    };
+                    pointDistances.push(pointDistance)
                 }
             }
         }
 
-        return intersection;
+        pointDistances.sort(function(a, b){return a.distance - b.distance}); 
+        let secondIntersection = null;
+        if(pointDistances.length > 1){
+            return pointDistances[1].point
+        }
+
+        if(pointDistances.length == 1) {
+            secondIntersection =  pointDistances[0]
+        }
+
+        if(secondIntersection == null || (secondIntersection.distance < maxDistance)){
+            secondIntersection = {}
+            secondIntersection.point = createVector(this.direction.x,this.direction.y)
+            secondIntersection.point.setMag(maxDistance)
+            secondIntersection.point.x += this.o.x
+            secondIntersection.point.y += this.o.y
+        }
+
+
+        return secondIntersection.point;
+        
     }
 
     cast(wall) {
