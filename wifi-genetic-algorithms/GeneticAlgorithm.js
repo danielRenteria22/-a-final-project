@@ -12,7 +12,6 @@ class GenericAlgorithm{
         for(let generation = 0; generation < generations; generation++) {
             console.log(`Trainig generation ${generation + 1}`);
             for(let individual of individuals) {
-                individual.drawRays(this.walls)
                 individual.calculateArea(this.walls)
             }
             
