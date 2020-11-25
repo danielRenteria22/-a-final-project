@@ -1,6 +1,8 @@
 let walls;
 let initialWallPoint;
 let modem;
+let btnStarTraining;
+let trainer;
 
 function setup() {
   createCanvas(800, 550);
@@ -14,16 +16,30 @@ function setup() {
   walls.addWall(upperRight,downRight);
   walls.addWall(downRight,downLeft);
   walls.addWall(downLeft,uppperLeft);
+
+  btnStarTraining = createButton('Iniciar entrenamiento');
+  btnStarTraining.position(19, 19);
+  btnStarTraining.mousePressed(startTraining);
+  trainer = new GenericAlgorithm(walls.walls)
   
   initialWallPoint = null;
-  modem = new Modem(400,275);
+  modem = null;
+}
+
+function startTraining(){
+  trainer.train((modemWinner) => {
+    console.log(modemWinner)
+    modem = modemWinner;
+  })
 }
 
 function draw() {
     // put drawing code here
     walls.draw();
-    modem.draw();
-    modem.drawRays(walls.walls);
+    if(modem != null){
+      modem.draw();
+      modem.drawRays(walls.walls);
+    }
     drawMousePosition();
     drawCurrentLine();
 }
