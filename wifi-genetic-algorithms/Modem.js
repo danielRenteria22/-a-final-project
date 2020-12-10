@@ -60,12 +60,12 @@ class Modem{
     combine(parent2) {
         let newX = this.findMiddleValue(this.x,parent2.x);
         let newY = this.findMiddleValue(this.y,parent2.y);
-        // if(Math.random() >= mutationRate){
-        //     newX += map(Math.random(),0,1,-10,-10);
-        // }
-        // if(Math.random() >= mutationRate){
-        //     newY += map(Math.random(),0,1,-10,-10);
-        // }
+        if(Math.random() <= mutationRate){
+            newX += map(Math.random(),0,1,-10,-10);
+        }
+        if(Math.random() <= mutationRate){
+            newY += map(Math.random(),0,1,-10,-10);
+        }
 
         newX = this.normalizaValue(newX,width)
         newY = this.normalizaValue(newY,height)

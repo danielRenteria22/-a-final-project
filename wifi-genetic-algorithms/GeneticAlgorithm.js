@@ -1,4 +1,4 @@
-const generations = 20
+const generations = 30
 const individualsPerGeneration = 70
 
 class GenericAlgorithm{
